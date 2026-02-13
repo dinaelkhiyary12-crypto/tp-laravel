@@ -1,44 +1,39 @@
 @extends('layouts.app')
 
 @section('content')
-<h3>Events List</h3>
+<h3>Participants</h3>
 
-<form method="GET" action="{{ route('events.index') }}">
-    <input type="text" name="search" placeholder="Search by title" value="{{ request('search') }}">
-    <button type="submit">Search</button>
-</form>
+<a href="{{ route('participants.create') }}">Add Participant</a><br><br>
 
-<a href="{{ route('events.create') }}">Create Event</a>
-
-<table border="1" cellpadding="5">
+<table border="1" cellpadding="5" cellspacing="0">
     <tr>
-        <th>Title</th>
-        <th>Date</th>
-        <th>Location</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Phone</th>
         <th>Actions</th>
     </tr>
-    @forelse($events as $event)
-    <tr>
-        <td>{{ $event->title }}</td>
-        <td>{{ $event->date }}</td>
-        <td>{{ $event->location }}</td>
-        <td>
-            <a href="{{ route('events.show', $event->id) }}">Show</a> |
-            <a href="{{ route('events.edit', $event->id) }}">Edit</a> |
 
-            <form action="{{ route('events.destroy', $event->id) }}" method="POST" style="display:inline;">
-                @csrf
-                @method('DELETE')
-                <button type="submit">Delete</button>
-            </form> |
+    @forelse($participants as $participant)
+        <tr>
+            <td>{{ $participant->first_name }}</td>
+            <td>{{ $participant->last_name }}</td>
+            <td>{{ $participant->email }}</td>
+            <td>{{ $participant->phone }}</td>
+            <td>
+                <a href="{{ route('participants.edit', $participant->id) }}">Edit</a>
 
-            <a href="{{ route('events.pdf', $event->id) }}">PDF</a> |
-        </td>
-    </tr>
+                <form action="{{ route('participants.destroy', $participant->id) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                </form>
+            </td>
+        </tr>
     @empty
-    <tr>
-        <td colspan="5">No events found.</td>
-    </tr>
+        <tr>
+            <td colspan="5">No participants found.</td>
+        </tr>
     @endforelse
 </table>
 @endsection
